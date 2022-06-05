@@ -31,7 +31,14 @@ const jogador1 = new Element({
     gravity: 2, 
 });
 //segundo marcador
-
+const jogador2 = new Element({
+    x: 650, 
+    y: 200, 
+    width: 15, 
+    height: 80, 
+    color: "#ffffff", 
+    gravity: 2, 
+});
 //bola
 
 //jogador 1 pontuação 
