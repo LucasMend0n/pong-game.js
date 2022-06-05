@@ -1,8 +1,8 @@
 const canvas = document.getElementById("pong");
 const context = canvas.getContext("2d");
 
-canvas.width = 1000; 
-canvas.height = 800; 
+canvas.width = 650; 
+canvas.height = 400; 
 
 let pontosP1 = 0; 
 let pontosP2 = 0; 
@@ -14,8 +14,8 @@ class Element{
         this.width = options.width ;
         this.height = options.height;
         this.color = options.color;
-        this.speed = options.x || 2;
-        this.gravity = options.x;
+        this.speed = options.speed || 2;
+        this.gravity = options.gravity;
     }
 }
 
@@ -23,16 +23,16 @@ class Element{
 const jogador1 = new Element({
     x: 10, 
     y: canvas.height/2, 
-    width: 20, 
+    width: 10, 
     height: 100, 
     color: "#ffffff", 
     gravity: 2, 
 });
 //segundo marcador
 const jogador2 = new Element({
-    x: 970, 
+    x: 630,
     y: canvas.height/2, 
-    width: 20, 
+    width: 10, 
     height: 100, 
     color: "#ffffff", 
     gravity: 2, 
@@ -40,10 +40,10 @@ const jogador2 = new Element({
 //bola
 
 const bola = new Element({
-    x: 1000/2, 
-    y: 800/2, 
-    width: 30, 
-    height: 30, 
+    x: 650/2, 
+    y: 400/2, 
+    width: 15, 
+    height: 15, 
     color: "red", 
     gravity: 1,
     speed: 1, 
@@ -60,7 +60,7 @@ function criaElemento(elemento){
 function exibePontuacao1(){
     context.font = '36px Arial';
     context.fillStyle = "#fff";
-    context.fillText(pontosP1, canvas.width/2-60,30); 
+    context.fillText(pontosP1, canvas.width/2-60, 30); 
 }
 
 //jogador 2 pontuação 
@@ -69,6 +69,38 @@ function exibePontuacao2(){
     context.font = '36px Arial';
     context.fillStyle = "#fff";
     context.fillText(pontosP2, canvas.width/2+60,30); 
+}
+
+//faz a bola quicar
+function bolaQuica(){
+    if(bola.y + bola.gravity<= 0 || bola.y + bola.gravity >= canvas.height){
+        bola.gravity = bola.gravity * -1; 
+        bola.y += bola.gravity; 
+        bola.x += bola.speed; 
+    }
+    else{
+        bola.y += bola.gravity; 
+        bola.x += bola.speed; 
+    }
+    bolaColide();
+}
+
+//detecta colisão
+function bolaColide(){
+    if(bola.x + bola.speed <= 0 || 
+        bola.x + bola.speed + bola.width >= canvas.width){
+        
+        bola.y += bola.gravity; 
+        bola.speed = bola.speed * - 1; 
+        bola.x += bola.speed; 
+
+    }else{
+
+        bola.y += bola.gravity; 
+        bola.x += bola.speed; 
+
+    }
+    mostraElementos();
 }
 
 // mostra elemento na tela
@@ -85,7 +117,7 @@ function mostraElementos(){
 //loop do jogo
 
 function loop(){
-    mostraElementos()
+    bolaQuica()
     window.requestAnimationFrame(loop)
 }
 
